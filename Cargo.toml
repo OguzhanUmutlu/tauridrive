@@ -1,0 +1,37 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/cdp",
+    "crates/driver",
+    "crates/bench",
+    "crates/cli",
+]
+default-members = ["crates/cli"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["Oguzhan Umutlu"]
+license = "MIT"
+description = "Lightweight CDP automation, script runner, and visual benchmarking harness for Tauri applications"
+repository = "https://github.com/OguzhanUmutlu/tauridrive"
+
+[workspace.dependencies]
+tauridrive-cdp = { path = "crates/cdp" }
+tauridrive-driver = { path = "crates/driver" }
+tauridrive-bench = { path = "crates/bench" }
+
+tokio = { version = "1", features = ["full"] }
+tokio-tungstenite = { version = "0.24" }
+futures-util = "0.3"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+clap = { version = "4.5", features = ["derive"] }
+image = { version = "0.25", default-features = false, features = ["png", "jpeg"] }
+base64 = "0.22"
+thiserror = "1.0"
+anyhow = "1.0"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+indicatif = "0.17"

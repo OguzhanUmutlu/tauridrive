@@ -1,0 +1,25 @@
+[package]
+name = "tauridrive"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "Lightweight CDP automation, script runner, and visual benchmarking CLI for Tauri applications"
+
+[[bin]]
+name = "tauridrive"
+path = "src/main.rs"
+
+[dependencies]
+tauridrive-cdp = { workspace = true }
+tauridrive-driver = { workspace = true }
+tauridrive-bench = { workspace = true }
+tokio = { workspace = true }
+clap = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+anyhow = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+indicatif = { workspace = true }
+image = { workspace = true }

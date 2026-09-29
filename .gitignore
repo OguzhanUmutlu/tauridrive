@@ -1,0 +1,11 @@
+/target
+**/*.rs.bk
+Cargo.lock
+*.png
+*.jpeg
+*.jpg
+*.webp
+*.json
+!Cargo.toml
+!package.json
+!tauri.conf.json
