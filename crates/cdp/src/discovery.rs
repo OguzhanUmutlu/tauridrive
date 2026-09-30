@@ -36,11 +36,30 @@ impl Discovery {
 
         while start.elapsed() < timeout {
             if let Ok(targets) = self.get_targets().await {
-                // Find first page target or target with websocket URL
-                if let Some(target) = targets.into_iter().find(|t| {
-                    t.websocket_debugger_url.is_some() && (t.target_type == "page" || t.target_type == "webview")
-                }) {
-                    return Ok(target);
+                let valid_targets: Vec<TargetInfo> = targets
+                    .into_iter()
+                    .filter(|t| t.websocket_debugger_url.is_some())
+                    .collect();
+
+                // 1. Prefer explicit page or webview targets
+                if let Some(target) = valid_targets
+                    .iter()
+                    .find(|t| t.target_type == "page" || t.target_type == "webview")
+                {
+                    return Ok(target.clone());
+                }
+
+                // 2. Otherwise prefer anything that is not internal browser UI
+                if let Some(target) = valid_targets
+                    .iter()
+                    .find(|t| t.target_type != "browser" && t.target_type != "browser_ui" && t.target_type != "other")
+                {
+                    return Ok(target.clone());
+                }
+
+                // 3. Fallback to first available target
+                if let Some(target) = valid_targets.first() {
+                    return Ok(target.clone());
                 }
             }
             tokio::time::sleep(poll_interval).await;

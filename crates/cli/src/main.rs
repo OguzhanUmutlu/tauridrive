@@ -18,6 +18,10 @@ struct Cli {
     #[arg(short, long, default_value_t = 9222, global = true)]
     port: u16,
 
+    /// Timeout in seconds to wait for CDP targets to become ready
+    #[arg(long, default_value_t = 15, global = true)]
+    timeout: u64,
+
     #[command(subcommand)]
     command: Commands,
 }
@@ -186,7 +190,7 @@ async fn main() -> Result<()> {
 
         Commands::Attach => {
             println!("Connecting to Tauri webview at {}:{}...", cli.host, cli.port);
-            let driver = Driver::attach_to_target(&cli.host, cli.port, Duration::from_secs(5))
+            let driver = Driver::attach_to_target(&cli.host, cli.port, Duration::from_secs(cli.timeout))
                 .await
                 .context("Failed to attach to target")?;
             println!(" Connected successfully!");
@@ -197,7 +201,7 @@ async fn main() -> Result<()> {
         }
 
         Commands::Eval { expression } => {
-            let driver = Driver::attach_to_target(&cli.host, cli.port, Duration::from_secs(5))
+            let driver = Driver::attach_to_target(&cli.host, cli.port, Duration::from_secs(cli.timeout))
                 .await
                 .context("Failed to attach to target")?;
             let res = driver.eval(&expression).await?;
@@ -205,7 +209,7 @@ async fn main() -> Result<()> {
         }
 
         Commands::Run { script } => {
-            let driver = Driver::attach_to_target(&cli.host, cli.port, Duration::from_secs(5))
+            let driver = Driver::attach_to_target(&cli.host, cli.port, Duration::from_secs(cli.timeout))
                 .await
                 .context("Failed to attach to target")?;
             println!("Running script {:?}...", script);
@@ -218,7 +222,7 @@ async fn main() -> Result<()> {
             button,
             count,
         } => {
-            let mut driver = Driver::attach_to_target(&cli.host, cli.port, Duration::from_secs(5))
+            let mut driver = Driver::attach_to_target(&cli.host, cli.port, Duration::from_secs(cli.timeout))
                 .await
                 .context("Failed to attach to target")?;
             let btn = match button.to_lowercase().as_str() {
@@ -237,7 +241,7 @@ async fn main() -> Result<()> {
         }
 
         Commands::Hover { selector } => {
-            let mut driver = Driver::attach_to_target(&cli.host, cli.port, Duration::from_secs(5))
+            let mut driver = Driver::attach_to_target(&cli.host, cli.port, Duration::from_secs(cli.timeout))
                 .await
                 .context("Failed to attach to target")?;
             let rect = driver.get_element_rect(&selector).await?;
@@ -248,7 +252,7 @@ async fn main() -> Result<()> {
         }
 
         Commands::Move { x, y } => {
-            let mut driver = Driver::attach_to_target(&cli.host, cli.port, Duration::from_secs(5))
+            let mut driver = Driver::attach_to_target(&cli.host, cli.port, Duration::from_secs(cli.timeout))
                 .await
                 .context("Failed to attach to target")?;
             println!("Moving cursor to ({:.1}, {:.1})...", x, y);
@@ -261,7 +265,7 @@ async fn main() -> Result<()> {
             selector,
             full_page,
         } => {
-            let driver = Driver::attach_to_target(&cli.host, cli.port, Duration::from_secs(5))
+            let driver = Driver::attach_to_target(&cli.host, cli.port, Duration::from_secs(cli.timeout))
                 .await
                 .context("Failed to attach to target")?;
 
@@ -306,7 +310,7 @@ async fn main() -> Result<()> {
             duration,
             fps,
         } => {
-            let driver = Driver::attach_to_target(&cli.host, cli.port, Duration::from_secs(5))
+            let driver = Driver::attach_to_target(&cli.host, cli.port, Duration::from_secs(cli.timeout))
                 .await
                 .context("Failed to attach to target")?;
 
@@ -333,7 +337,7 @@ async fn main() -> Result<()> {
             report,
             frames_dir,
         } => {
-            let driver = Driver::attach_to_target(&cli.host, cli.port, Duration::from_secs(5))
+            let driver = Driver::attach_to_target(&cli.host, cli.port, Duration::from_secs(cli.timeout))
                 .await
                 .context("Failed to attach to target")?;
 

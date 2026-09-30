@@ -19,3 +19,5 @@ tracing = { workspace = true }
 
 [dev-dependencies]
 tokio-tungstenite = { workspace = true }
+tauridrive-bench = { workspace = true }
+reqwest = { workspace = true }
